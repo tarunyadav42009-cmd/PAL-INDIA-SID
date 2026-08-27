@@ -3,35 +3,31 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.sql.*;
 
 public class ProfessionalManagementSystem extends JFrame {
     
-    // Core Shared Database Instance (Shared across all functional sub-forms)
-    private static final ArrayList<StudentRecord> database = new ArrayList<>();
-
-    // Institution Branding Theme Colors
+    // Database Connection Parameters (Modify user/password to match your local MySQL configuration)
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/pal_india_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = ""; // Removed "root", left empty
+ 
+    // UI Color Theme Palette
     private final Color PRIMARY_NAVY = new Color(44, 62, 80);
     private final Color ACCENT_BLUE = new Color(52, 152, 219);
     private final Color EXCEL_GREEN = new Color(46, 204, 113);
     private final Color BACKGROUND_GRAY = new Color(245, 247, 250);
 
     public ProfessionalManagementSystem() {
-        // Initial Seed Mock Records for testing Search queries
-        if (database.isEmpty()) {
-            database.add(new StudentRecord("Rahul Sharma", "9876543210", "Mumbai, India", "Java Programming", "4500", "2026-08-10"));
-            database.add(new StudentRecord("Priya Patel", "9123456789", "Vasai, Maharashtra", "Web Development", "6000", "2026-08-25"));
-        }
-
-        // Framework Configuration Profile
-        setTitle("PAL INDIA COMPUTER EDUCATION - Student Ledger");
+        // Core Layout Management Configurations
+        setTitle("PAL INDIA COMPUTER EDUCATION - Live SQL Ledger");
         setSize(950, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         getContentPane().setBackground(BACKGROUND_GRAY);
         setLayout(new BorderLayout());
 
-        // --- 1. GLOBAL NAV BANNER ---
+        // --- 1. NAVIGATION TOP DISPLAY HEADER ---
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(PRIMARY_NAVY);
         headerPanel.setBorder(new EmptyBorder(25, 30, 25, 30));
@@ -40,7 +36,7 @@ public class ProfessionalManagementSystem extends JFrame {
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
         titleLabel.setForeground(Color.WHITE);
         
-        JLabel subtitleLabel = new JLabel("Enterprise Student Directory Portal v2.0", JLabel.RIGHT);
+        JLabel subtitleLabel = new JLabel("Enterprise Portal Connected to Live MySQL Core", JLabel.RIGHT);
         subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         subtitleLabel.setForeground(new Color(200, 214, 229));
 
@@ -48,15 +44,15 @@ public class ProfessionalManagementSystem extends JFrame {
         headerPanel.add(subtitleLabel, BorderLayout.EAST);
         add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. FOUR CARD GRID SYSTEM INTERFACE ---
+        // --- 2. MULTI-CARD PANEL SYSTEM INTERFACE ---
         JPanel mainGrid = new JPanel(new GridLayout(1, 4, 15, 0));
         mainGrid.setBackground(BACKGROUND_GRAY);
         mainGrid.setBorder(new EmptyBorder(60, 25, 70, 25));
 
-        JButton addStudentCard = createDashboardCard("Add Student", "Register new entries into current profile batch.", EXCEL_GREEN);
-        JButton feesCard       = createDashboardCard("Fees Structure", "Generate invoices and track cleared ledger logs.", ACCENT_BLUE);
-        JButton searchCard     = createDashboardCard("Search Record", "Filter and inspect active institutional student files.", PRIMARY_NAVY);
-        JButton adminCard      = createDashboardCard("Admin Panel", "Audit global workspace profiles and program diagnostics.", PRIMARY_NAVY);
+        JButton addStudentCard = createDashboardCard("Add Student", "Register new entries directly into production database tables.", EXCEL_GREEN);
+        JButton feesCard       = createDashboardCard("Fees Structure", "Generate invoices and extract live payment accounts profiles.", ACCENT_BLUE);
+        JButton searchCard     = createDashboardCard("Search Record", "Filter and inspect active institutional student storage logs.", PRIMARY_NAVY);
+        JButton adminCard      = createDashboardCard("Admin Panel", "Audit global workspace counts and database connection health.", PRIMARY_NAVY);
 
         mainGrid.add(addStudentCard);
         mainGrid.add(feesCard);
@@ -64,14 +60,13 @@ public class ProfessionalManagementSystem extends JFrame {
         mainGrid.add(adminCard);
         add(mainGrid, BorderLayout.CENTER);
 
-        // --- 3. EVENT ROUTERS ---
+        // --- 3. CORE LOGIC ROUTERS MAPPING ---
         addStudentCard.addActionListener(e -> openAddStudentDialog());
         feesCard.addActionListener(e -> openFeesDialog());
         searchCard.addActionListener(e -> openSearchDialog());
         adminCard.addActionListener(e -> openAdminDialog());
     }
 
-    // High Density Custom Render Dashboard Item Button Module
     private JButton createDashboardCard(String title, String description, Color baseAccent) {
         JButton button = new JButton();
         button.setLayout(new BorderLayout(0, 10));
@@ -115,7 +110,7 @@ public class ProfessionalManagementSystem extends JFrame {
 
         return button;
     }
-    // --- MODULE 1: REGISTER NEW STUDENT REGISTRATION ENTRY ---
+    // --- MODULE 1: INTERACTIVE STUDENT LIVE REGISTRATION OVER SQL ---
     private void openAddStudentDialog() {
         JDialog dialog = new JDialog(this, "Pal India Admissions Office", true);
         dialog.setSize(480, 500);
@@ -133,30 +128,22 @@ public class ProfessionalManagementSystem extends JFrame {
         JTextField txtCourse = new JTextField(20);
         JTextField txtBill = new JTextField(20);
         JTextField txtDate = new JTextField(20);
-        
-        // Auto-fill field with current year parameter values
-        txtDate.setText("2026-08-27");
+        txtDate.setText("2026-08-27"); // Auto-fill current date parameter
 
-        // Map layout locations across Grid Matrix
         gbc.gridx = 0; gbc.gridy = 0; formPanel.add(new JLabel("Student Name:"), gbc);
         gbc.gridx = 1; formPanel.add(txtName, gbc);
-        
         gbc.gridx = 0; gbc.gridy = 1; formPanel.add(new JLabel("Mobile Number:"), gbc);
         gbc.gridx = 1; formPanel.add(txtMobile, gbc);
-        
         gbc.gridx = 0; gbc.gridy = 2; formPanel.add(new JLabel("Address Location:"), gbc);
         gbc.gridx = 1; formPanel.add(txtAddress, gbc);
-        
         gbc.gridx = 0; gbc.gridy = 3; formPanel.add(new JLabel("Enrolled Course:"), gbc);
         gbc.gridx = 1; formPanel.add(txtCourse, gbc);
-        
         gbc.gridx = 0; gbc.gridy = 4; formPanel.add(new JLabel("Course Fee Bill (INR):"), gbc);
         gbc.gridx = 1; formPanel.add(txtBill, gbc);
-        
         gbc.gridx = 0; gbc.gridy = 5; formPanel.add(new JLabel("Date of Admission:"), gbc);
         gbc.gridx = 1; formPanel.add(txtDate, gbc);
 
-        JButton btnSave = new JButton("Confirm Registration");
+        JButton btnSave = new JButton("Confirm SQL Insert");
         btnSave.setBackground(EXCEL_GREEN);
         btnSave.setForeground(Color.WHITE);
         btnSave.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -166,20 +153,32 @@ public class ProfessionalManagementSystem extends JFrame {
 
         btnSave.addActionListener(e -> {
             if (txtName.getText().trim().isEmpty() || txtMobile.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Failed: Name and Mobile Number parameters required.", "Validation Fault", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Validation Error: Name and Mobile Number are required.", "Validation Fault", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Directly append to database memory grid state variables
-            StudentRecord entry = new StudentRecord(
-                txtName.getText().trim(), txtMobile.getText().trim(),
-                txtAddress.getText().trim(), txtCourse.getText().trim(),
-                txtBill.getText().trim(), txtDate.getText().trim()
-            );
-            database.add(entry);
+            // Secure Parameterized Statement Insert Engine
+            String query = "INSERT INTO student_records (name, mobile_no, address, course, bill, date_of_admission) VALUES (?, ?, ?, ?, ?, ?)";
+            
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+                
+                pstmt.setString(1, txtName.getText().trim());
+                pstmt.setString(2, txtMobile.getText().trim());
+                pstmt.setString(3, txtAddress.getText().trim());
+                pstmt.setString(4, txtCourse.getText().trim());
+                pstmt.setDouble(5, Double.parseDouble(txtBill.getText().trim().isEmpty() ? "0" : txtBill.getText().trim()));
+                pstmt.setString(6, txtDate.getText().trim());
 
-            JOptionPane.showMessageDialog(dialog, "Success: " + entry.name + " uploaded to PAL INDIA system database directory.", "Record Saved", JOptionPane.INFORMATION_MESSAGE);
-            dialog.dispose();
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(dialog, "Success: Record inserted directly into MySQL Database schema.", "Database Update Complete", JOptionPane.INFORMATION_MESSAGE);
+                dialog.dispose();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(dialog, "JDBC Error: Connection failed.\nDetails: " + ex.getMessage(), "Database Connection Fault", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Error: Bill value numeric mapping failed.", "Type Parsing Fault", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         dialog.add(formPanel, BorderLayout.CENTER);
@@ -187,7 +186,7 @@ public class ProfessionalManagementSystem extends JFrame {
         dialog.setVisible(true);
     }
 
-    // --- MODULE 2: ACCOUNT STATEMENT AND INVOICING ---
+    // --- MODULE 2: SQL CONNECTED ACCOUNT STATEMENT AND RECEIPT GENERATOR ---
     private void openFeesDialog() {
         JDialog dialog = new JDialog(this, "Billing Ledger System", true);
         dialog.setSize(750, 480);
@@ -201,7 +200,7 @@ public class ProfessionalManagementSystem extends JFrame {
 
         JTextField txtSearchName = new JTextField();
         JTextField txtPaidAmt = new JTextField();
-        JButton btnProcess = new JButton("Generate Disbursement Invoice");
+        JButton btnProcess = new JButton("Fetch & Generate Receipt");
         btnProcess.setBackground(ACCENT_BLUE);
         btnProcess.setForeground(Color.WHITE);
 
@@ -221,34 +220,35 @@ public class ProfessionalManagementSystem extends JFrame {
 
         btnProcess.addActionListener(e -> {
             String searchTarget = txtSearchName.getText().trim();
-            StudentRecord targetedProfile = null;
+            String selectQuery = "SELECT * FROM student_records WHERE name = ? LIMIT 1";
 
-            for (StudentRecord student : database) {
-                if (student.name.equalsIgnoreCase(searchTarget)) {
-                    targetedProfile = student;
-                    break;
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
+                
+                pstmt.setString(1, searchTarget);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    txtReceipt.setText(
+                        "=========================================\n" +
+                        "         PAL INDIA COMPUTER EDUCATION    \n" +
+                        "               OFFICIAL FEES SLIP        \n" +
+                        "=========================================\n" +
+                        "  • Candidate Name    : " + rs.getString("name") + "\n" +
+                        "  • Phone Contact ID  : " + rs.getString("mobile_no") + "\n" +
+                        "  • Class Curriculum  : " + rs.getString("course") + "\n" +
+                        "  • Total base Bill   : INR " + rs.getDouble("bill") + "\n" +
+                        "  • Remittance Flow   : INR " + txtPaidAmt.getText().trim() + "\n" +
+                        "=========================================\n" +
+                        "  Status Trace: Pulled from MySQL server rows.\n" +
+                        "=========================================\n"
+                    );
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "No candidate match located inside MySQL row queries matching search text.", "Profile Not Found", JOptionPane.WARNING_MESSAGE);
                 }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(dialog, "Query Error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            if (targetedProfile == null) {
-                JOptionPane.showMessageDialog(dialog, "No account matches name string identifier inside local index file.", "Profile Missing", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            txtReceipt.setText(
-                "=========================================\n" +
-                "         PAL INDIA COMPUTER EDUCATION    \n" +
-                "               OFFICIAL FEES SLIP        \n" +
-                "=========================================\n" +
-                "  • Candidate Full Name : " + targetedProfile.name + "\n" +
-                "  • Phone Reference Id  : " + targetedProfile.mobileNo + "\n" +
-                "  • Class Curriculum    : " + targetedProfile.course + "\n" +
-                "  • Base Total Bill Amount : INR " + targetedProfile.bill + "\n" +
-                "  • Processed Remittance   : INR " + txtPaidAmt.getText().trim() + "\n" +
-                "=========================================\n" +
-                "  Status Trace: Payment Verified in Memory.\n" +
-                "=========================================\n"
-            );
         });
 
         dialog.add(formPanel);
@@ -256,7 +256,7 @@ public class ProfessionalManagementSystem extends JFrame {
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
-    // --- MODULE 3: MOBILE OR NAME STRING SEARCH CROSS REFERENCE TOOL ---
+    // --- MODULE 3: INTERCONNECTED SCANNER VIA SQL PARAMETER EXTRACTIONS ---
     private void openSearchDialog() {
         JDialog dialog = new JDialog(this, "Master Registry Query Scanner", true);
         dialog.setSize(650, 420);
@@ -266,7 +266,7 @@ public class ProfessionalManagementSystem extends JFrame {
         searchBarPanel.setBorder(new EmptyBorder(15, 15, 10, 15));
         
         JTextField searchField = new JTextField();
-        JButton searchBtn = new JButton("Execute Directory Scan");
+        JButton searchBtn = new JButton("Run Live Database Query");
         searchBtn.setBackground(PRIMARY_NAVY);
         searchBtn.setForeground(Color.WHITE);
 
@@ -278,32 +278,41 @@ public class ProfessionalManagementSystem extends JFrame {
         resultDisplay.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         resultDisplay.setMargin(new Insets(15, 15, 15, 15));
         resultDisplay.setEditable(false);
-        resultDisplay.setText("Enter complete query parameter index string text input.\nMock default records ready to search: 'Rahul Sharma' or 'Priya Patel'");
+        resultDisplay.setText("Enter complete query parameter index string text input inside SQL database rows.");
 
         searchBtn.addActionListener(e -> {
-            String query = searchField.getText().trim().toLowerCase();
+            String queryPattern = "%" + searchField.getText().trim() + "%";
+            String searchQuery = "SELECT * FROM student_records WHERE name LIKE ? OR mobile_no LIKE ?";
             StringBuilder buffer = new StringBuilder();
             boolean matchFound = false;
 
-            for (StudentRecord s : database) {
-                if (s.name.toLowerCase().contains(query) || s.mobileNo.contains(query)) {
-                    buffer.append("🔍 PAL INDIA FOUND DATA MATCH:\n")
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+                
+                pstmt.setString(1, queryPattern);
+                pstmt.setString(2, queryPattern);
+                ResultSet rs = pstmt.executeQuery();
+
+                while (rs.next()) {
+                    buffer.append("🔍 PAL INDIA FOUND DATA MATCH (Live SQL Database):\n")
                           .append("--------------------------------------------------\n")
-                          .append(" • Student Name     : ").append(s.name).append("\n")
-                          .append(" • Contact Line     : ").append(s.mobileNo).append("\n")
-                          .append(" • Street Address   : ").append(s.address).append("\n")
-                          .append(" • Current Course   : ").append(s.course).append("\n")
-                          .append(" • Ledger Bill Fees : INR ").append(s.bill).append("\n")
-                          .append(" • Matriculation Dt : ").append(s.dateOfAdmission).append("\n")
+                          .append(" • Student Name     : ").append(rs.getString("name")).append("\n")
+                          .append(" • Contact Line     : ").append(rs.getString("mobile_no")).append("\n")
+                          .append(" • Street Address   : ").append(rs.getString("address")).append("\n")
+                          .append(" • Current Course   : ").append(rs.getString("course")).append("\n")
+                          .append(" • Ledger Bill Fees : INR ").append(rs.getDouble("bill")).append("\n")
+                          .append(" • Matriculation Dt : ").append(rs.getDate("date_of_admission")).append("\n")
                           .append("--------------------------------------------------\n\n");
                     matchFound = true;
                 }
-            }
 
-            if (matchFound) {
-                resultDisplay.setText(buffer.toString());
-            } else {
-                resultDisplay.setText("❌ QUERY COMPLETE: Zero corresponding data rows matches in array directory matrix framework.");
+                if (matchFound) {
+                    resultDisplay.setText(buffer.toString());
+                } else {
+                    resultDisplay.setText("❌ QUERY COMPLETE: Zero matching data records found inside MySQL storage tables.");
+                }
+            } catch (SQLException ex) {
+                resultDisplay.setText("SQL Query Failure: " + ex.getMessage());
             }
         });
 
@@ -313,7 +322,7 @@ public class ProfessionalManagementSystem extends JFrame {
         dialog.setVisible(true);
     }
 
-    // --- MODULE 4: CENTRAL AUDIT CONSOLE ---
+    // --- MODULE 4: REAL-TIME RELATIONAL DIAGNOSTICS VIEW ---
     private void openAdminDialog() {
         JDialog dialog = new JDialog(this, "Central Audit Control Matrix", true);
         dialog.setSize(500, 380);
@@ -330,15 +339,29 @@ public class ProfessionalManagementSystem extends JFrame {
         metricsArea.setFont(new Font("Consolas", Font.PLAIN, 13));
         metricsArea.setEditable(false);
         metricsArea.setMargin(new Insets(20, 20, 20, 20));
+
+        int totalCount = 0;
+        String statusMessage = "Online / Secured";
         
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS row_count FROM student_records")) {
+            if (rs.next()) {
+                totalCount = rs.getInt("row_count");
+            }
+        } catch (SQLException ex) {
+            statusMessage = "OFFLINE - CONNECTION FAULT";
+        }
+
         metricsArea.setText(
             "====================================================\n" +
             "            PAL INDIA OPERATIONAL TELEMETRY        \n" +
             "====================================================\n" +
-            "  • Environment Core Core   : Java Swing Architecture\n" +
-            "  • Local Memory Pipeline   : ACTIVE (" + database.size() + " Students Registered)\n" +
+            "  • Environment Core Core   : Java Swing UI Core\n" +
+            "  • Pipeline Architecture   : MySQL Dynamic JDBC Connection\n" +
+            "  • Database Records Count  : " + totalCount + " Records Live in Tables\n" +
+            "  • Network Pipeline State  : " + statusMessage + "\n" +
             "  • Security Authority Lock : Root Administrator Clearance\n" +
-            "  • Access Nodes Integrity  : Synchronized Matrix Secure\n" +
             "====================================================\n"
         );
 
@@ -358,18 +381,12 @@ public class ProfessionalManagementSystem extends JFrame {
         dialog.setVisible(true);
     }
 
-    // Interactive Blueprint Structural Object Definition
-    static class StudentRecord {
-        String name, mobileNo, address, course, bill, dateOfAdmission;
-        public StudentRecord(String n, String m, String a, String c, String b, String d) {
-            this.name = n; this.mobileNo = m; this.address = a; 
-            this.course = c; this.bill = b; this.dateOfAdmission = d;
-        }
-    }
-
-    // --- MAIN EXECUTABLE FRAMEWORK APPLICATION ENTRY POINT ---
+    // --- APPLICATION STARTING RUNNER PORT ---
     public static void main(String[] args) {
         try {
+            // FORCES JAVA RUNTIME SYSTEM TO INITIALIZE DYNAMIC JDBC MYSQL DRIVER CLASSPATH ENGINES
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
