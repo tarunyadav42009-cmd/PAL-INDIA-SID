@@ -8,12 +8,13 @@ import java.sql.*;
 import java.util.Vector;
 
 public class ProfessionalManagementSystem extends JFrame {
-    
-    // Database Connection Parameters (Modify user/password to match your local MySQL configuration)
+
+    // Database Connection Parameters (Modify user/password to match your local
+    // MySQL configuration)
     private static final String DB_URL = "jdbc:mysql://localhost:3306/pal_india_db";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = ""; 
- 
+    private static final String DB_PASSWORD = "";
+
     // UI Color Theme Palette
     private final Color PRIMARY_NAVY = new Color(44, 62, 80);
     private final Color ACCENT_BLUE = new Color(52, 152, 219);
@@ -33,11 +34,11 @@ public class ProfessionalManagementSystem extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(PRIMARY_NAVY);
         headerPanel.setBorder(new EmptyBorder(25, 30, 25, 30));
-        
+
         JLabel titleLabel = new JLabel("PAL INDIA COMPUTER EDUCATION");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
         titleLabel.setForeground(Color.WHITE);
-        
+
         JLabel subtitleLabel = new JLabel("Enterprise Portal Connected to Live MySQL Core", JLabel.RIGHT);
         subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         subtitleLabel.setForeground(new Color(200, 214, 229));
@@ -51,10 +52,14 @@ public class ProfessionalManagementSystem extends JFrame {
         mainGrid.setBackground(BACKGROUND_GRAY);
         mainGrid.setBorder(new EmptyBorder(60, 25, 70, 25));
 
-        JButton addStudentCard = createDashboardCard("Add Student", "Register new entries directly into production database tables.", EXCEL_GREEN);
-        JButton feesCard       = createDashboardCard("Fees Structure", "Generate invoices and extract live payment accounts profiles.", ACCENT_BLUE);
-        JButton searchCard     = createDashboardCard("Search Record", "Filter and inspect active institutional student storage logs.", PRIMARY_NAVY);
-        JButton adminCard      = createDashboardCard("Admin Panel", "Audit global workspace counts and database connection health.", PRIMARY_NAVY);
+        JButton addStudentCard = createDashboardCard("Add Student",
+                "Register new entries directly into production database tables.", EXCEL_GREEN);
+        JButton feesCard = createDashboardCard("Fees Structure",
+                "Generate invoices and extract live payment accounts profiles.", ACCENT_BLUE);
+        JButton searchCard = createDashboardCard("Search Record",
+                "Filter and inspect active institutional student storage logs.", PRIMARY_NAVY);
+        JButton adminCard = createDashboardCard("Admin Panel",
+                "Audit global workspace counts and database connection health.", PRIMARY_NAVY);
 
         mainGrid.add(addStudentCard);
         mainGrid.add(feesCard);
@@ -74,9 +79,8 @@ public class ProfessionalManagementSystem extends JFrame {
         button.setLayout(new BorderLayout(0, 10));
         button.setBackground(Color.WHITE);
         button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(220, 224, 230), 1, true),
-            BorderFactory.createEmptyBorder(25, 15, 25, 15)
-        ));
+                BorderFactory.createLineBorder(new Color(220, 224, 230), 1, true),
+                BorderFactory.createEmptyBorder(25, 15, 25, 15)));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -96,22 +100,22 @@ public class ProfessionalManagementSystem extends JFrame {
             public void mouseEntered(MouseEvent evt) {
                 button.setBackground(new Color(242, 246, 250));
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(baseAccent, 1, true),
-                    BorderFactory.createEmptyBorder(25, 15, 25, 15)
-                ));
+                        BorderFactory.createLineBorder(baseAccent, 1, true),
+                        BorderFactory.createEmptyBorder(25, 15, 25, 15)));
             }
+
             @Override
             public void mouseExited(MouseEvent evt) {
                 button.setBackground(Color.WHITE);
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(220, 224, 230), 1, true),
-                    BorderFactory.createEmptyBorder(25, 15, 25, 15)
-                ));
+                        BorderFactory.createLineBorder(new Color(220, 224, 230), 1, true),
+                        BorderFactory.createEmptyBorder(25, 15, 25, 15)));
             }
         });
 
         return button;
     }
+
     // --- MODULE 1: INTERACTIVE STUDENT LIVE REGISTRATION OVER SQL ---
     private void openAddStudentDialog() {
         JDialog dialog = new JDialog(this, "Pal India Admissions Office", true);
@@ -130,54 +134,78 @@ public class ProfessionalManagementSystem extends JFrame {
         JTextField txtCourse = new JTextField(20);
         JTextField txtBill = new JTextField(20);
         JTextField txtDate = new JTextField(20);
-        txtDate.setText("2026-08-27"); 
+        txtDate.setText("2026-08-27");
 
-        gbc.gridx = 0; gbc.gridy = 0; formPanel.add(new JLabel("Student Name:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtName, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; formPanel.add(new JLabel("Mobile Number:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtMobile, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; formPanel.add(new JLabel("Address Location:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtAddress, gbc);
-        gbc.gridx = 0; gbc.gridy = 3; formPanel.add(new JLabel("Enrolled Course:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtCourse, gbc);
-        gbc.gridx = 0; gbc.gridy = 4; formPanel.add(new JLabel("Course Fee Bill (INR):"), gbc);
-        gbc.gridx = 1; formPanel.add(txtBill, gbc);
-        gbc.gridx = 0; gbc.gridy = 5; formPanel.add(new JLabel("Date of Admission:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtDate, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        formPanel.add(new JLabel("Student Name:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtName, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(new JLabel("Mobile Number:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtMobile, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        formPanel.add(new JLabel("Address Location:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtAddress, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        formPanel.add(new JLabel("Enrolled Course:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtCourse, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        formPanel.add(new JLabel("Course Fee Bill (INR):"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtBill, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        formPanel.add(new JLabel("Date of Admission:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtDate, gbc);
 
         JButton btnSave = new JButton("Confirm SQL Insert");
         btnSave.setBackground(EXCEL_GREEN);
         btnSave.setForeground(Color.WHITE);
         btnSave.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2; gbc.insets = new Insets(25, 5, 5, 5);
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(25, 5, 5, 5);
         formPanel.add(btnSave, gbc);
 
         btnSave.addActionListener(e -> {
             if (txtName.getText().trim().isEmpty() || txtMobile.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Validation Error: Name and Mobile Number are required.", "Validation Fault", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Validation Error: Name and Mobile Number are required.",
+                        "Validation Fault", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             String query = "INSERT INTO student_records (name, mobile_no, address, course, bill, date_of_admission) VALUES (?, ?, ?, ?, ?, ?)";
-            
+
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                 PreparedStatement pstmt = conn.prepareStatement(query)) {
-                
+                    PreparedStatement pstmt = conn.prepareStatement(query)) {
+
                 pstmt.setString(1, txtName.getText().trim());
                 pstmt.setString(2, txtMobile.getText().trim());
                 pstmt.setString(3, txtAddress.getText().trim());
                 pstmt.setString(4, txtCourse.getText().trim());
                 pstmt.setString(5, txtBill.getText().trim());
                 pstmt.setString(6, txtDate.getText().trim());
-                
+
                 pstmt.executeUpdate();
-                JOptionPane.showMessageDialog(dialog, "Student Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Student Added Successfully!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
                 dialog.dispose();
-                
+
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(dialog, "Database Error: " + ex.getMessage(), "Database Fault", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Database Error: " + ex.getMessage(), "Database Fault",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -189,7 +217,8 @@ public class ProfessionalManagementSystem extends JFrame {
     // --- MODULE 2: ORIGINAL FEES STRUCTURE AND NEW METRIC VIEWS COMBINED ---
     private void openFeesDialog() {
         // Your original functional layout instruction left intact
-        JOptionPane.showMessageDialog(this, "Fees Dashboard Operational.", "System Info", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Fees Dashboard Operational.", "System Info",
+                JOptionPane.INFORMATION_MESSAGE);
 
         // Your newly requested operational analytics dashboard elements attached below
         JDialog dialog = new JDialog(this, "Fees Analytical Structure Summary", true);
@@ -243,20 +272,22 @@ public class ProfessionalManagementSystem extends JFrame {
 
         String query = "SELECT SUM(bill), AVG(bill), MAX(bill) FROM student_records";
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
             if (rs.next()) {
                 lblRevValue.setText(String.format("₹ %.2f  ", rs.getDouble(1)));
                 lblAvgValue.setText(String.format("₹ %.2f  ", rs.getDouble(2)));
                 lblMaxValue.setText(String.format("₹ %.2f  ", rs.getDouble(3)));
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(dialog, "Metrics Processing Interrupted: " + ex.getMessage(), "SQL Aggregation Fault", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(dialog, "Metrics Processing Interrupted: " + ex.getMessage(),
+                    "SQL Aggregation Fault", JOptionPane.ERROR_MESSAGE);
         }
 
         dialog.add(mainPanel, BorderLayout.CENTER);
         dialog.setVisible(true);
     }
+
     // --- MODULE 3: INTERACTIVE RECORD INSPECTION FILTERS (LIVE SEARCH) ---
     private void openSearchDialog() {
         JDialog dialog = new JDialog(this, "Production Database Ledger Audit Window", true);
@@ -282,7 +313,8 @@ public class ProfessionalManagementSystem extends JFrame {
         topBar.add(txtSearch, BorderLayout.CENTER);
         topBar.add(btnFilter, BorderLayout.EAST);
 
-        DefaultTableModel tableModel = new DefaultTableModel(new String[]{"ID", "Student Name", "Mobile Number", "Address", "Course Enrolled", "Fees Invoiced", "Admission Date"}, 0);
+        DefaultTableModel tableModel = new DefaultTableModel(new String[] { "ID", "Student Name", "Mobile Number",
+                "Address", "Course Enrolled", "Fees Invoiced", "Admission Date" }, 0);
         JTable recordsTable = new JTable(tableModel);
         recordsTable.setRowHeight(25);
         recordsTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -290,20 +322,20 @@ public class ProfessionalManagementSystem extends JFrame {
         tableScrollPane.setBorder(new EmptyBorder(10, 20, 20, 20));
 
         Runnable loadFilteredRecords = () -> {
-            tableModel.setRowCount(0); 
+            tableModel.setRowCount(0);
             String searchFilter = txtSearch.getText().trim();
             String selectQuery = "SELECT * FROM student_records WHERE name LIKE ? OR course LIKE ?";
-            
+
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                 PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
-                
+                    PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
+
                 pstmt.setString(1, "%" + searchFilter + "%");
                 pstmt.setString(2, "%" + searchFilter + "%");
-                
+
                 try (ResultSet rs = pstmt.executeQuery()) {
                     while (rs.next()) {
                         Vector<Object> row = new Vector<>();
-                        row.add(rs.getInt("id")); 
+                        row.add(rs.getInt("id"));
                         row.add(rs.getString("name"));
                         row.add(rs.getString("mobile_no"));
                         row.add(rs.getString("address"));
@@ -392,10 +424,10 @@ public class ProfessionalManagementSystem extends JFrame {
                     lblStatusValue.setText("CONNECTED ONLINE  ");
                     lblStatusValue.setForeground(EXCEL_GREEN);
                 }
-                
+
                 String countScholarsSQL = "SELECT COUNT(*), COUNT(DISTINCT course) FROM student_records";
                 try (Statement stmt = conn.createStatement();
-                     ResultSet rs = stmt.executeQuery(countScholarsSQL)) {
+                        ResultSet rs = stmt.executeQuery(countScholarsSQL)) {
                     if (rs.next()) {
                         lblScholarsValue.setText(rs.getInt(1) + "  ");
                         lblCoursesValue.setText(rs.getInt(2) + "  ");
@@ -410,7 +442,7 @@ public class ProfessionalManagementSystem extends JFrame {
         };
 
         btnPing.addActionListener(e -> runSystemAudit.run());
-        runSystemAudit.run(); 
+        runSystemAudit.run();
 
         dialog.add(mainPanel, BorderLayout.CENTER);
         dialog.setVisible(true);
