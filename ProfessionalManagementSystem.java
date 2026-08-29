@@ -134,33 +134,38 @@ public class ProfessionalManagementSystem extends JFrame {
         JTextField txtCourse = new JTextField(20);
         JTextField txtBill = new JTextField(20);
         JTextField txtDate = new JTextField(20);
-        txtDate.setText("2026-08-27");
+        txtDate.setText("2026-08-29");
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(new JLabel("Student Name:"), gbc);
         gbc.gridx = 1;
         formPanel.add(txtName, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         formPanel.add(new JLabel("Mobile Number:"), gbc);
         gbc.gridx = 1;
         formPanel.add(txtMobile, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 2;
         formPanel.add(new JLabel("Address Location:"), gbc);
         gbc.gridx = 1;
         formPanel.add(txtAddress, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 3;
         formPanel.add(new JLabel("Enrolled Course:"), gbc);
         gbc.gridx = 1;
         formPanel.add(txtCourse, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 4;
         formPanel.add(new JLabel("Course Fee Bill (INR):"), gbc);
         gbc.gridx = 1;
         formPanel.add(txtBill, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 5;
         formPanel.add(new JLabel("Date of Admission:"), gbc);
@@ -194,7 +199,14 @@ public class ProfessionalManagementSystem extends JFrame {
                 pstmt.setString(2, txtMobile.getText().trim());
                 pstmt.setString(3, txtAddress.getText().trim());
                 pstmt.setString(4, txtCourse.getText().trim());
-                pstmt.setString(5, txtBill.getText().trim());
+
+                double billAmount = 0.0;
+                try {
+                    billAmount = Double.parseDouble(txtBill.getText().trim());
+                } catch (NumberFormatException nfe) {
+                    // Fallback to 0.0 if empty
+                }
+                pstmt.setDouble(5, billAmount);
                 pstmt.setString(6, txtDate.getText().trim());
 
                 pstmt.executeUpdate();
@@ -214,80 +226,159 @@ public class ProfessionalManagementSystem extends JFrame {
         dialog.setVisible(true);
     }
 
-    // --- MODULE 2: ORIGINAL FEES STRUCTURE AND NEW METRIC VIEWS COMBINED ---
+    // --- MODULE 2: INTERACTIVE ENTERPRISE FEES RECEIPT CONSOLE ---
     private void openFeesDialog() {
-        // Your original functional layout instruction left intact
-        JOptionPane.showMessageDialog(this, "Fees Dashboard Operational.", "System Info",
-                JOptionPane.INFORMATION_MESSAGE);
-
-        // Your newly requested operational analytics dashboard elements attached below
-        JDialog dialog = new JDialog(this, "Fees Analytical Structure Summary", true);
-        dialog.setSize(600, 350);
+        JDialog dialog = new JDialog(this, "Enterprise Invoice Terminal", true);
+        dialog.setSize(1000, 650);
         dialog.setLayout(new BorderLayout());
         dialog.setLocationRelativeTo(this);
 
-        JPanel mainPanel = new JPanel(new GridLayout(3, 1, 15, 15));
-        mainPanel.setBorder(new EmptyBorder(25, 30, 25, 30));
-        mainPanel.setBackground(BACKGROUND_GRAY);
+        // Left Frame: Quick Scholar Selection Ledger
+        DefaultTableModel smallModel = new DefaultTableModel(new String[]{"ID", "Scholar Name", "Course Assigned"}, 0);
+        JTable smallTable = new JTable(smallModel);
+        smallTable.setRowHeight(22);
+        JScrollPane leftScroll = new JScrollPane(smallTable);
+        leftScroll.setPreferredSize(new Dimension(300, 0));
+        leftScroll.setBorder(BorderFactory.createTitledBorder(" Select Student Record "));
 
-        JPanel totalRevenueCard = new JPanel(new BorderLayout());
-        totalRevenueCard.setBackground(Color.WHITE);
-        totalRevenueCard.setBorder(BorderFactory.createLineBorder(new Color(220, 224, 230), 1, true));
-        JLabel lblRevTitle = new JLabel("  Gross Invoiced Fees Accumulation", JLabel.LEFT);
-        lblRevTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lblRevTitle.setForeground(PRIMARY_NAVY);
-        JLabel lblRevValue = new JLabel("INR 0.00  ", JLabel.RIGHT);
-        lblRevValue.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        lblRevValue.setForeground(EXCEL_GREEN);
-        totalRevenueCard.add(lblRevTitle, BorderLayout.WEST);
-        totalRevenueCard.add(lblRevValue, BorderLayout.EAST);
+        // Right Frame: Professional Printing Workspace Canvas Render View
+        JEditorPane receiptPane = new JEditorPane();
+        receiptPane.setEditable(false);
+        receiptPane.setContentType("text/html");
+        JScrollPane rightScroll = new JScrollPane(receiptPane);
+        rightScroll.setBorder(BorderFactory.createTitledBorder(" Live Document Preview Canvas "));
 
-        JPanel avgCourseCard = new JPanel(new BorderLayout());
-        avgCourseCard.setBackground(Color.WHITE);
-        avgCourseCard.setBorder(BorderFactory.createLineBorder(new Color(220, 224, 230), 1, true));
-        JLabel lblAvgTitle = new JLabel("  Average Billing Per Scholar", JLabel.LEFT);
-        lblAvgTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lblAvgTitle.setForeground(PRIMARY_NAVY);
-        JLabel lblAvgValue = new JLabel("INR 0.00  ", JLabel.RIGHT);
-        lblAvgValue.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        lblAvgValue.setForeground(ACCENT_BLUE);
-        avgCourseCard.add(lblAvgTitle, BorderLayout.WEST);
-        avgCourseCard.add(lblAvgValue, BorderLayout.EAST);
+        JSplitPane horizontalSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftScroll, rightScroll);
+        horizontalSplit.setDividerLocation(320);
+        dialog.add(horizontalSplit, BorderLayout.CENTER);
 
-        JPanel maxCourseCard = new JPanel(new BorderLayout());
-        maxCourseCard.setBackground(Color.WHITE);
-        maxCourseCard.setBorder(BorderFactory.createLineBorder(new Color(220, 224, 230), 1, true));
-        JLabel lblMaxTitle = new JLabel("  Peak Premium Invoice Registered", JLabel.LEFT);
-        lblMaxTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lblMaxTitle.setForeground(PRIMARY_NAVY);
-        JLabel lblMaxValue = new JLabel("INR 0.00  ", JLabel.RIGHT);
-        lblMaxValue.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        lblMaxValue.setForeground(PRIMARY_NAVY);
-        maxCourseCard.add(lblMaxTitle, BorderLayout.WEST);
-        maxCourseCard.add(lblMaxValue, BorderLayout.EAST);
+        // Action Toolbar Control Panel footer elements placement rules
+        JPanel controlBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+        controlBar.setBackground(Color.WHITE);
+        JButton btnPrint = new JButton("Execute System Print Pipeline");
+        btnPrint.setBackground(ACCENT_BLUE);
+        btnPrint.setForeground(Color.WHITE);
+        btnPrint.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnPrint.setEnabled(false);
+        controlBar.add(btnPrint);
+        dialog.add(controlBar, BorderLayout.SOUTH);
 
-        mainPanel.add(totalRevenueCard);
-        mainPanel.add(avgCourseCard);
-        mainPanel.add(maxCourseCard);
-
-        String query = "SELECT SUM(bill), AVG(bill), MAX(bill) FROM student_records";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(query)) {
-            if (rs.next()) {
-                lblRevValue.setText(String.format("₹ %.2f  ", rs.getDouble(1)));
-                lblAvgValue.setText(String.format("₹ %.2f  ", rs.getDouble(2)));
-                lblMaxValue.setText(String.format("₹ %.2f  ", rs.getDouble(3)));
+        // Synchronous runtime data mapping route invocation
+        Runnable populateStudentList = () -> {
+            smallModel.setRowCount(0);
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery("SELECT id, name, course FROM student_records ORDER BY id DESC")) {
+                while (rs.next()) {
+                    smallModel.addRow(new Object[]{rs.getInt("id"), rs.getString("name"), rs.getString("course")});
+                }
+            } catch (SQLException ex) {
+                receiptPane.setText("<html><body><p style='color:red;'>System data retrieval failure: " + ex.getMessage() + "</p></body></html>");
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(dialog, "Metrics Processing Interrupted: " + ex.getMessage(),
-                    "SQL Aggregation Fault", JOptionPane.ERROR_MESSAGE);
-        }
+        };
 
-        dialog.add(mainPanel, BorderLayout.CENTER);
-        dialog.setVisible(true);
-    }
+        // Selection mapping tracking routine monitoring dynamic clicks
+        smallTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && smallTable.getSelectedRow() != -1) {
+                int studentId = (int) smallTable.getValueAt(smallTable.getSelectedRow(), 0);
+                
+                String query = "SELECT * FROM student_records WHERE id = ?";
+                try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                     PreparedStatement pstmt = conn.prepareStatement(query)) {
+                    pstmt.setInt(1, studentId);
+                    
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            String name = rs.getString("name");
+                            String mobile = rs.getString("mobile_no");
+                            String address = rs.getString("address");
+                            String course = rs.getString("course");
+                            double bill = rs.getDouble("bill");
+                            String dateStr = rs.getString("date_of_admission");
 
+                            // Dynamic Generation of Professional HTML/CSS Invoice Element
+                            String invoiceHtml = "<html>" +
+                                "<head><style>" +
+                                "body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 20px; color: #2c3e50; background-color:#ffffff; }" +
+                                ".receipt-card { border: 2px solid #34495e; padding: 25px; background: #ffffff; }" +
+                                ".header-table { width: 100%; border-bottom: 3px double #34495e; padding-bottom: 15px; }" +
+                                ".title { font-size: 22px; font-weight: bold; color: #2c3e50; }" +
+                                ".meta-details { width: 100%; margin-top: 15px; margin-bottom: 25px; font-size: 12px; }" +
+                                ".item-table { width: 100%; border-collapse: collapse; margin-top: 15px; }" +
+                                ".item-table th { background-color: #2c3e50; color: #ffffff; padding: 8px; font-size: 13px; text-align: left; }" +
+                                ".item-table td { padding: 10px; border-bottom: 1px solid #dcdde1; font-size: 13px; }" +
+                                ".total-row { font-size: 15px; font-weight: bold; background-color: #f5f6fa; }" +
+                                ".footer-signature { width: 100%; margin-top: 50px; font-size: 12px; }" +
+                                "</style></head>" +
+                                "<body>" +
+                                "<div class='receipt-card'>" +
+                                "  <table class='header-table'>" +
+                                "    <tr>" +
+                                "      <td><span class='title'>PAL INDIA COMPUTER EDUCATION</span><br/>" +
+                                "      <small style='color:#7f8c8d;'>Premium Quality Technical Learning Matrix</small></td>" +
+                                "      <td align='right' valign='top'><strong>OFFICIAL FEES RECEIPT</strong><br/>" +
+                                "      <span style='color:#e74c3c;'>Inv No: #PIN/" + dateStr.replace("-","") + "/" + studentId + "</span></td>" +
+                                "    </tr>" +
+                                "  </table>" +
+                                "  <table class='meta-details'>" +
+                                "    <tr>" +
+                                "      <td><strong>Billed To:</strong><br/>" + name + "<br/>Contact: " + mobile + "<br/>Loc: " + address + "</td>" +
+                                "      <td align='right' valign='top'><strong>Transaction Metadata:</strong><br/>Date: " + dateStr + "<br/>Mode: Direct Core Cash Ledger<br/>Status: <b>PAID Verified</b></td>" +
+                                "    </tr>" +
+                                "  </table>" +
+                                "  <table class='item-table'>" +
+                                "    <thead>" +
+                                "      <tr>" +
+                                "        <th>Description of Institutional Modules Enrolled</th>" +
+                                "        <th align='right' style='text-align: right; width: 120px;'>Amount (INR)</th>" +
+                                "      </tr>" +
+                                "    </thead>" +
+                                "    <tbody>" +
+                                "      <tr>" +
+                                "        <td>Program Tuition & Resource License Fee for: <b>" + course + "</b></td>" +
+                                "        <td align='right' style='text-align: right;'>₹ " + String.format("%.2f", bill) + "</td>" +
+                                "      </tr>" +
+                                "      <tr>" +
+                                "        <td>Workspace Technology infrastructure Levies</td>" +
+                                "        <td align='right' style='text-align: right;'>₹ 0.00</td>" +
+                                "      </tr>" +
+                                "      <tr class='total-row'>" +
+                                "        <td align='right'>Cumulative Net Sum Settled:</td>" +
+                                "        <td align='right' style='text-align: right; color:#27ae60;'>₹ " + String.format("%.2f", bill) + "</td>" +
+                                "      </tr>" +
+                                "    </tbody>" +
+                                "  </table>" +
+                                "  <table class='footer-signature'>" +
+                                "    <tr>" +
+                                "      <td><small>This document acts as an explicit structural verification tracking transaction validation metrics.</small></td>" +
+                                "      <td align='right' valign='bottom'><br/><br/>----------------------------------------<br/>Authorized Registrar Seal Signature</td>" +
+                                "    </tr>" +
+                                "  </table>" +
+                                "</div>" +
+                                "</body>" +
+                                "</html>";
+                            
+                            receiptPane.setText(invoiceHtml);
+                            btnPrint.setEnabled(true);
+                        }
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(dialog, "Query pipeline failure: " + ex.getMessage());
+                }
+            }
+        });
+
+        // Native System Printing Dialog Link Pipeline Action
+        btnPrint.addActionListener(e -> {
+            try {
+                boolean finished = receiptPane.print(null, null, true, null, null, true);
+                if (finished) {
+                    JOptionPane.showMessageDialog(dialog, "Document routed to system spooler successfully.", "Print Completed", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception ex) {
+JOptionPane.showMessageDialog(dialog, "Print engine failure interface exception: " + ex.getMessage(), 
+"Printing Fault", JOptionPane.ERROR_MESSAGE);}});
+populateStudentList.run();dialog.setVisible(true);}
     // --- MODULE 3: INTERACTIVE RECORD INSPECTION FILTERS (LIVE SEARCH) ---
     private void openSearchDialog() {
         JDialog dialog = new JDialog(this, "Production Database Ledger Audit Window", true);
@@ -299,7 +390,7 @@ public class ProfessionalManagementSystem extends JFrame {
         topBar.setBorder(new EmptyBorder(15, 20, 15, 20));
         topBar.setBackground(PRIMARY_NAVY);
 
-        JLabel lblSearch = new JLabel("Dynamic Search Filter (Name / Course): ");
+        JLabel lblSearch = new JLabel("Dynamic Search Filter (Scholar / Program Name): ");
         lblSearch.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblSearch.setForeground(Color.WHITE);
         JTextField txtSearch = new JTextField();
@@ -313,8 +404,8 @@ public class ProfessionalManagementSystem extends JFrame {
         topBar.add(txtSearch, BorderLayout.CENTER);
         topBar.add(btnFilter, BorderLayout.EAST);
 
-        DefaultTableModel tableModel = new DefaultTableModel(new String[] { "ID", "Student Name", "Mobile Number",
-                "Address", "Course Enrolled", "Fees Invoiced", "Admission Date" }, 0);
+        DefaultTableModel tableModel = new DefaultTableModel(new String[]{"ID", "Scholar Name", "Mobile Number",
+                "Address Location", "Active Program", "Gross Invoiced Balance", "Admission Date"}, 0);
         JTable recordsTable = new JTable(tableModel);
         recordsTable.setRowHeight(25);
         recordsTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -327,7 +418,7 @@ public class ProfessionalManagementSystem extends JFrame {
             String selectQuery = "SELECT * FROM student_records WHERE name LIKE ? OR course LIKE ?";
 
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                    PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
+                 PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
 
                 pstmt.setString(1, "%" + searchFilter + "%");
                 pstmt.setString(2, "%" + searchFilter + "%");
@@ -427,7 +518,7 @@ public class ProfessionalManagementSystem extends JFrame {
 
                 String countScholarsSQL = "SELECT COUNT(*), COUNT(DISTINCT course) FROM student_records";
                 try (Statement stmt = conn.createStatement();
-                        ResultSet rs = stmt.executeQuery(countScholarsSQL)) {
+                     ResultSet rs = stmt.executeQuery(countScholarsSQL)) {
                     if (rs.next()) {
                         lblScholarsValue.setText(rs.getInt(1) + "  ");
                         lblCoursesValue.setText(rs.getInt(2) + "  ");
@@ -449,6 +540,10 @@ public class ProfessionalManagementSystem extends JFrame {
     }
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
+
         SwingUtilities.invokeLater(() -> {
             new ProfessionalManagementSystem().setVisible(true);
         });
