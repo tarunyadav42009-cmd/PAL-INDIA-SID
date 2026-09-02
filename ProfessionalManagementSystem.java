@@ -597,5 +597,5 @@ public class ProfessionalManagementSystem extends JFrame {
             new ProfessionalManagementSystem().setVisible(true);
         });
     }
-} // <-- Make sure this final brace closes your class file!
+} 
 
