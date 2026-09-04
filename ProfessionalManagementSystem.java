@@ -114,7 +114,8 @@ public class ProfessionalManagementSystem extends JFrame {
 
         return button;
     }
-        // --- MODULE 1: INTERACTIVE STUDENT LIVE REGISTRATION OVER SQL ---
+
+    // --- MODULE 1: INTERACTIVE STUDENT LIVE REGISTRATION OVER SQL ---
     private void openAddStudentDialog() {
         JDialog dialog = new JDialog(this, "Pal India Admissions Office", true);
         dialog.setSize(480, 520);
@@ -135,39 +136,63 @@ public class ProfessionalManagementSystem extends JFrame {
         JTextField txtDate = new JTextField(20);
         txtDate.setText("2026-08-29");
 
-        gbc.gridx = 0; gbc.gridy = 0; formPanel.add(new JLabel("Student Name:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtName, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; formPanel.add(new JLabel("Mobile Number:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtMobile, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; formPanel.add(new JLabel("Address Location:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtAddress, gbc);
-        gbc.gridx = 0; gbc.gridy = 3; formPanel.add(new JLabel("Enrolled Course:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtCourse, gbc);
-        gbc.gridx = 0; gbc.gridy = 4; formPanel.add(new JLabel("Course Fee Bill (INR):"), gbc);
-        gbc.gridx = 1; formPanel.add(txtBill, gbc);
-        gbc.gridx = 0; gbc.gridy = 5; formPanel.add(new JLabel("Date of Admission:"), gbc);
-        gbc.gridx = 1; formPanel.add(txtDate, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        formPanel.add(new JLabel("Student Name:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtName, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(new JLabel("Mobile Number:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtMobile, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        formPanel.add(new JLabel("Address Location:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtAddress, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        formPanel.add(new JLabel("Enrolled Course:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtCourse, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        formPanel.add(new JLabel("Course Fee Bill (INR):"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtBill, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        formPanel.add(new JLabel("Date of Admission:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtDate, gbc);
 
         JButton btnSave = new JButton("Confirm SQL Insert");
         btnSave.setBackground(EXCEL_GREEN);
         btnSave.setForeground(Color.WHITE);
         btnSave.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2; gbc.insets = new Insets(25, 5, 5, 5);
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(25, 5, 5, 5);
         formPanel.add(btnSave, gbc);
 
         btnSave.addActionListener(e -> {
             if (txtName.getText().trim().isEmpty() || txtMobile.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Validation Error: Name and Mobile Number are required.", "Validation Fault", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Validation Error: Name and Mobile Number are required.",
+                        "Validation Fault", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             double billVal = 0.0;
             try {
-                if (!txtBill.getText().trim().isEmpty()) billVal = Double.parseDouble(txtBill.getText().trim());
-            } catch (NumberFormatException nfe) { /* Fallback to 0.0 */ }
+                if (!txtBill.getText().trim().isEmpty())
+                    billVal = Double.parseDouble(txtBill.getText().trim());
+            } catch (NumberFormatException nfe) {
+                /* Fallback to 0.0 */ }
 
             String query = "INSERT INTO student_records (name, mobile_no, address, course, bill, pending_balance, date_of_admission) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+                    PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setString(1, txtName.getText().trim());
                 pstmt.setString(2, txtMobile.getText().trim());
                 pstmt.setString(3, txtAddress.getText().trim());
@@ -177,18 +202,20 @@ public class ProfessionalManagementSystem extends JFrame {
                 pstmt.setString(7, txtDate.getText().trim());
 
                 if (pstmt.executeUpdate() > 0) {
-                    JOptionPane.showMessageDialog(dialog, "Student Registered Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(dialog, "Student Registered Successfully!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
                     dialog.dispose();
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(dialog, "Database Error: " + ex.getMessage(), "Database Fault", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Database Error: " + ex.getMessage(), "Database Fault",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
         dialog.add(formPanel, BorderLayout.CENTER);
         dialog.setVisible(true);
     }
 
-        // --- MODULE 2: LIVE SQL FEES TRANSACTION ENGINE LOGICS ---
+    // --- MODULE 2: LIVE SQL FEES TRANSACTION ENGINE LOGICS ---
     private void openFeesDialog() {
         JDialog dialog = new JDialog(this, "Enterprise Monthly Installment Terminal", true);
         dialog.setSize(1100, 680);
@@ -196,14 +223,16 @@ public class ProfessionalManagementSystem extends JFrame {
         dialog.setLocationRelativeTo(this);
 
         // Left Workspace Panel Splitter
-        DefaultTableModel smallModel = new DefaultTableModel(new String[]{"ID", "Scholar Name", "Course Assigned"}, 0);
+        DefaultTableModel smallModel = new DefaultTableModel(new String[] { "ID", "Scholar Name", "Course Assigned" },
+                0);
         JTable smallTable = new JTable(smallModel);
         smallTable.setRowHeight(22);
         JScrollPane leftScroll = new JScrollPane(smallTable);
         leftScroll.setPreferredSize(new Dimension(300, 0));
         leftScroll.setBorder(BorderFactory.createTitledBorder(" Select Student Record "));
 
-        // Right Workspace Panel Splitter (Top Preview Canvas, Bottom Payment Collector Form)
+        // Right Workspace Panel Splitter (Top Preview Canvas, Bottom Payment Collector
+        // Form)
         JEditorPane receiptPane = new JEditorPane();
         receiptPane.setEditable(false);
         receiptPane.setContentType("text/html");
@@ -211,14 +240,15 @@ public class ProfessionalManagementSystem extends JFrame {
         rightScroll.setBorder(BorderFactory.createTitledBorder(" Real-Time Document Ledger Canvas "));
 
         JPanel transactionInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
-        transactionInputPanel.setBorder(BorderFactory.createTitledBorder(" Record New Monthly Installment Fee Payment "));
+        transactionInputPanel
+                .setBorder(BorderFactory.createTitledBorder(" Record New Monthly Installment Fee Payment "));
         JTextField txtPayAmount = new JTextField(10);
         JTextField txtPayRemarks = new JTextField(15);
         JButton btnProcessPayment = new JButton("Post Payment Transaction");
         btnProcessPayment.setBackground(EXCEL_GREEN);
         btnProcessPayment.setForeground(Color.WHITE);
         btnProcessPayment.setEnabled(false);
-        
+
         transactionInputPanel.add(new JLabel("Amount Paid:"));
         transactionInputPanel.add(txtPayAmount);
         transactionInputPanel.add(new JLabel("Month / Remarks:"));
@@ -243,17 +273,18 @@ public class ProfessionalManagementSystem extends JFrame {
         controlBar.add(btnPrint);
         dialog.add(controlBar, BorderLayout.SOUTH);
 
-            // Synchronous runtime list reloader
+        // Synchronous runtime list reloader
         Runnable populateStudentList = () -> {
             smallModel.setRowCount(0);
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT id, name, course FROM student_records ORDER BY id DESC")) {
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery("SELECT id, name, course FROM student_records ORDER BY id DESC")) {
                 while (rs.next()) {
-                    smallModel.addRow(new Object[]{rs.getInt("id"), rs.getString("name"), rs.getString("course")});
+                    smallModel.addRow(new Object[] { rs.getInt("id"), rs.getString("name"), rs.getString("course") });
                 }
             } catch (SQLException ex) {
-                receiptPane.setText("<html><body><p style='color:red;'>System data retrieval failure: " + ex.getMessage() + "</p></body></html>");
+                receiptPane.setText("<html><body><p style='color:red;'>System data retrieval failure: "
+                        + ex.getMessage() + "</p></body></html>");
             }
         };
         smallTable.getSelectionModel().addListSelectionListener(e -> {
@@ -262,7 +293,7 @@ public class ProfessionalManagementSystem extends JFrame {
                 btnProcessPayment.setEnabled(true);
 
                 try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                     PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM student_records WHERE id = ?")) {
+                        PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM student_records WHERE id = ?")) {
                     pstmt.setInt(1, studentId);
                     try (ResultSet rs = pstmt.executeQuery()) {
                         if (rs.next()) {
@@ -272,48 +303,60 @@ public class ProfessionalManagementSystem extends JFrame {
                             String course = rs.getString("course");
                             double bill = rs.getDouble("bill");
                             double pendingBalance = rs.getDouble("pending_balance");
-                            String notes = rs.getString("dynamic_notes") == null ? "No transaction records posted" : rs.getString("dynamic_notes");
+                            String notes = rs.getString("dynamic_notes") == null ? "No transaction records posted"
+                                    : rs.getString("dynamic_notes");
 
                             // Pull recent individual monthly transactional history lines dynamically
                             StringBuilder historyRows = new StringBuilder();
-                            try (PreparedStatement txP = conn.prepareStatement("SELECT amount_paid, payment_date, remarks FROM fee_transactions WHERE student_id=? ORDER BY transaction_id ASC")) {
+                            try (PreparedStatement txP = conn.prepareStatement(
+                                    "SELECT amount_paid, payment_date, remarks FROM fee_transactions WHERE student_id=? ORDER BY transaction_id ASC")) {
                                 txP.setInt(1, studentId);
                                 try (ResultSet txRs = txP.executeQuery()) {
                                     while (txRs.next()) {
-                                        historyRows.append(String.format("<tr><td>Installment Entry (%s) - %s</td><td align='right'>₹ %.2f</td></tr>",
-                                            txRs.getTimestamp("payment_date").toString().substring(0, 16), txRs.getString("remarks"), txRs.getDouble("amount_paid")));
+                                        historyRows.append(String.format(
+                                                "<tr><td>Installment Entry (%s) - %s</td><td align='right'>₹ %.2f</td></tr>",
+                                                txRs.getTimestamp("payment_date").toString().substring(0, 16),
+                                                txRs.getString("remarks"), txRs.getDouble("amount_paid")));
                                     }
                                 }
                             }
 
                             String invoiceHtml = "<html><head><style>" +
-                                "body { font-family: 'Segoe UI', sans-serif; padding: 10px; color: #2c3e50; }" +
-                                ".receipt-card { border: 2px solid #2c3e50; padding: 15px; }" +
-                                ".item-table { width: 100%; border-collapse: collapse; margin-top: 10px; }" +
-                                ".item-table th { background-color: #2c3e50; color: #ffffff; padding: 6px; text-align: left; }" +
-                                ".item-table td { padding: 6px; border-bottom: 1px solid #dcdde1; }" +
-                                ".total-row { font-size: 13px; font-weight: bold; background-color: #f8f9fa; }" +
-                                "</style></head><body><div class='receipt-card'>" +
-                                "<h2>PAL INDIA COMPUTER EDUCATION</h2>" +
-                                "<p><b>Student Profile:</b> " + name + " | <b>Course:</b> " + course + " | <b>Contact:</b> " + mobile + "</p>" +
-                                "<table class='item-table'><thead><tr><th>Transaction Milestone Trace</th><th align='right'>Amount (INR)</th></tr></thead>" +
-                                "<tbody><tr><td><b>Gross Assigned Base Contract Fees</b></td><td align='right'>₹ " + String.format("%.2f", bill) + "</td></tr>" +
-                                historyRows.toString() +
-                                "<tr class='total-row'><td align='right'>Current Net Remaining Balance:</td><td align='right' style='color:#e74c3c;'>₹ " + String.format("%.2f", pendingBalance) + "</td></tr>" +
-                                "</tbody></table></div></body></html>";
+                                    "body { font-family: 'Segoe UI', sans-serif; padding: 10px; color: #2c3e50; }" +
+                                    ".receipt-card { border: 2px solid #2c3e50; padding: 15px; }" +
+                                    ".item-table { width: 100%; border-collapse: collapse; margin-top: 10px; }" +
+                                    ".item-table th { background-color: #2c3e50; color: #ffffff; padding: 6px; text-align: left; }"
+                                    +
+                                    ".item-table td { padding: 6px; border-bottom: 1px solid #dcdde1; }" +
+                                    ".total-row { font-size: 13px; font-weight: bold; background-color: #f8f9fa; }" +
+                                    "</style></head><body><div class='receipt-card'>" +
+                                    "<h2>PAL INDIA COMPUTER EDUCATION</h2>" +
+                                    "<p><b>Student Profile:</b> " + name + " | <b>Course:</b> " + course
+                                    + " | <b>Contact:</b> " + mobile + "</p>" +
+                                    "<table class='item-table'><thead><tr><th>Transaction Milestone Trace</th><th align='right'>Amount (INR)</th></tr></thead>"
+                                    +
+                                    "<tbody><tr><td><b>Gross Assigned Base Contract Fees</b></td><td align='right'>₹ "
+                                    + String.format("%.2f", bill) + "</td></tr>" +
+                                    historyRows.toString() +
+                                    "<tr class='total-row'><td align='right'>Current Net Remaining Balance:</td><td align='right' style='color:#e74c3c;'>₹ "
+                                    + String.format("%.2f", pendingBalance) + "</td></tr>" +
+                                    "</tbody></table></div></body></html>";
 
                             receiptPane.setText(invoiceHtml);
                             btnPrint.setEnabled(true);
                         }
                     }
-                } catch (SQLException ex) { ex.printStackTrace(); }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
         // Click handler to post money updates and instantly deduct balance metrics
         btnProcessPayment.addActionListener(evt -> {
             int targetRow = smallTable.getSelectedRow();
-            if (targetRow == -1) return;
+            if (targetRow == -1)
+                return;
             int studentId = (int) smallTable.getValueAt(targetRow, 0);
 
             try {
@@ -324,38 +367,54 @@ public class ProfessionalManagementSystem extends JFrame {
                     conn.setAutoCommit(false);
                     try {
                         // 1. Post dynamic record entry line inside history logger
-                        try (PreparedStatement txStmt = conn.prepareStatement("INSERT INTO fee_transactions (student_id, amount_paid, remarks) VALUES (?, ?, ?)")) {
+                        try (PreparedStatement txStmt = conn.prepareStatement(
+                                "INSERT INTO fee_transactions (student_id, amount_paid, remarks) VALUES (?, ?, ?)")) {
                             txStmt.setInt(1, studentId);
                             txStmt.setDouble(2, paymentAmount);
                             txStmt.setString(3, remarks);
                             txStmt.executeUpdate();
                         }
                         // 2. Perform background mathematical deduction metrics
-                        try (PreparedStatement updateBal = conn.prepareStatement("UPDATE student_records SET pending_balance = pending_balance - ? WHERE id = ?")) {
+                        try (PreparedStatement updateBal = conn.prepareStatement(
+                                "UPDATE student_records SET pending_balance = pending_balance - ? WHERE id = ?")) {
                             updateBal.setDouble(1, paymentAmount);
                             updateBal.setInt(2, studentId);
                             updateBal.executeUpdate();
                         }
                         conn.commit();
-                        JOptionPane.showMessageDialog(dialog, "Installment Fee Logged and Subtracted Cleanly!", "Ledger Balanced", JOptionPane.INFORMATION_MESSAGE);
-                        txtPayAmount.setText(""); txtPayRemarks.setText("");
-                        smallTable.getSelectionModel().setSelectionInterval(targetRow, targetRow); // Force-refresh visual UI pane
-                    } catch (SQLException se) { conn.rollback(); throw se; }
+                        JOptionPane.showMessageDialog(dialog, "Installment Fee Logged and Subtracted Cleanly!",
+                                "Ledger Balanced", JOptionPane.INFORMATION_MESSAGE);
+                        txtPayAmount.setText("");
+                        txtPayRemarks.setText("");
+                        smallTable.getSelectionModel().setSelectionInterval(targetRow, targetRow); // Force-refresh
+                                                                                                   // visual UI pane
+                    } catch (SQLException se) {
+                        conn.rollback();
+                        throw se;
+                    }
                 }
-            } catch (Exception ex) { JOptionPane.showMessageDialog(dialog, "Invalid Entry Parameters: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Invalid Entry Parameters: " + ex.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         btnPrint.addActionListener(e -> {
             try {
                 if (receiptPane.print(null, null, true, null, null, true)) {
-                    JOptionPane.showMessageDialog(dialog, "Document routed to system print spooler successfully.", "Print Completed", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(dialog, "Document routed to system print spooler successfully.",
+                            "Print Completed", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } catch (Exception ex) { JOptionPane.showMessageDialog(dialog, "Printing Subsystem Error: " + ex.getMessage(), "Printing Fault", JOptionPane.ERROR_MESSAGE); }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Printing Subsystem Error: " + ex.getMessage(), "Printing Fault",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         populateStudentList.run();
         dialog.setVisible(true);
     }
+
     // --- MODULE 3: INTERACTIVE RECORD INSPECTION & MANAGEMENT CORE ---
     private void openSearchDialog() {
         JDialog dialog = new JDialog(this, "Production Database Ledger Audit Window", true);
@@ -380,11 +439,14 @@ public class ProfessionalManagementSystem extends JFrame {
         topBar.add(txtSearch, BorderLayout.CENTER);
         topBar.add(btnFilter, BorderLayout.EAST);
 
-        DefaultTableModel tableModel = new DefaultTableModel(new String[]{
-            "ID", "Scholar Name", "Mobile Number", "Address Location", "Active Program", "Gross Base Cost", "Net Outstanding Due Balance", "Profile Notes"
+        DefaultTableModel tableModel = new DefaultTableModel(new String[] {
+                "ID", "Scholar Name", "Mobile Number", "Address Location", "Active Program", "Gross Base Cost",
+                "Net Outstanding Due Balance", "Profile Notes"
         }, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { return false; }
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
 
         JTable recordsTable = new JTable(tableModel);
@@ -398,7 +460,7 @@ public class ProfessionalManagementSystem extends JFrame {
             String selectQuery = "SELECT id, name, mobile_no, address, course, bill, pending_balance, dynamic_notes FROM student_records WHERE name LIKE ? OR course LIKE ? OR address LIKE ?";
 
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                 PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
+                    PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
                 pstmt.setString(1, filterText);
                 pstmt.setString(2, filterText);
                 pstmt.setString(3, filterText);
@@ -417,7 +479,9 @@ public class ProfessionalManagementSystem extends JFrame {
                         tableModel.addRow(row);
                     }
                 }
-            } catch (SQLException ex) { ex.printStackTrace(); }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         };
 
         recordsTable.addMouseListener(new MouseAdapter() {
@@ -426,7 +490,7 @@ public class ProfessionalManagementSystem extends JFrame {
                 if (e.getClickCount() == 2 && recordsTable.getSelectedRow() != -1) {
                     int targetRow = recordsTable.getSelectedRow();
                     int targetId = (int) tableModel.getValueAt(targetRow, 0);
-                    
+
                     JDialog upDialog = new JDialog(dialog, "Modify Institutional Information Profiler", true);
                     upDialog.setSize(450, 480);
                     upDialog.setLayout(new GridBagLayout());
@@ -440,26 +504,50 @@ public class ProfessionalManagementSystem extends JFrame {
                     JTextField editAddress = new JTextField(tableModel.getValueAt(targetRow, 3).toString(), 20);
                     JTextField editCourse = new JTextField(tableModel.getValueAt(targetRow, 4).toString(), 20);
                     JTextField editBill = new JTextField(tableModel.getValueAt(targetRow, 5).toString(), 20);
-                    JTextArea editNotes = new JTextArea(tableModel.getValueAt(targetRow, 7) == null ? "" : tableModel.getValueAt(targetRow, 7).toString(), 3, 20);
-                    editNotes.setLineWrap(true); editNotes.setWrapStyleWord(true);
+                    JTextArea editNotes = new JTextArea(tableModel.getValueAt(targetRow, 7) == null ? ""
+                            : tableModel.getValueAt(targetRow, 7).toString(), 3, 20);
+                    editNotes.setLineWrap(true);
+                    editNotes.setWrapStyleWord(true);
                     editNotes.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
-                    gbc.gridx = 0; gbc.gridy = 0; upDialog.add(new JLabel("Scholar Name:"), gbc);
-                    gbc.gridx = 1; upDialog.add(editName, gbc);
-                    gbc.gridx = 0; gbc.gridy = 1; upDialog.add(new JLabel("Mobile Number:"), gbc);
-                    gbc.gridx = 1; upDialog.add(editMobile, gbc);
-                    gbc.gridx = 0; gbc.gridy = 2; upDialog.add(new JLabel("Address Location:"), gbc);
-                    gbc.gridx = 1; upDialog.add(editAddress, gbc);
-                    gbc.gridx = 0; gbc.gridy = 3; upDialog.add(new JLabel("Update Course:"), gbc);
-                    gbc.gridx = 1; upDialog.add(editCourse, gbc);
-                    gbc.gridx = 0; gbc.gridy = 4; upDialog.add(new JLabel("Gross Tuition (INR):"), gbc);
-                    gbc.gridx = 1; upDialog.add(editBill, gbc);
-                    gbc.gridx = 0; gbc.gridy = 5; upDialog.add(new JLabel("Profile Notes:"), gbc);
-                    gbc.gridx = 1; upDialog.add(new JScrollPane(editNotes), gbc);
+                    gbc.gridx = 0;
+                    gbc.gridy = 0;
+                    upDialog.add(new JLabel("Scholar Name:"), gbc);
+                    gbc.gridx = 1;
+                    upDialog.add(editName, gbc);
+                    gbc.gridx = 0;
+                    gbc.gridy = 1;
+                    upDialog.add(new JLabel("Mobile Number:"), gbc);
+                    gbc.gridx = 1;
+                    upDialog.add(editMobile, gbc);
+                    gbc.gridx = 0;
+                    gbc.gridy = 2;
+                    upDialog.add(new JLabel("Address Location:"), gbc);
+                    gbc.gridx = 1;
+                    upDialog.add(editAddress, gbc);
+                    gbc.gridx = 0;
+                    gbc.gridy = 3;
+                    upDialog.add(new JLabel("Update Course:"), gbc);
+                    gbc.gridx = 1;
+                    upDialog.add(editCourse, gbc);
+                    gbc.gridx = 0;
+                    gbc.gridy = 4;
+                    upDialog.add(new JLabel("Gross Tuition (INR):"), gbc);
+                    gbc.gridx = 1;
+                    upDialog.add(editBill, gbc);
+                    gbc.gridx = 0;
+                    gbc.gridy = 5;
+                    upDialog.add(new JLabel("Profile Notes:"), gbc);
+                    gbc.gridx = 1;
+                    upDialog.add(new JScrollPane(editNotes), gbc);
 
                     JButton btnUpdate = new JButton("Save Global Updates");
-                    btnUpdate.setBackground(EXCEL_GREEN); btnUpdate.setForeground(Color.WHITE);
-                    gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2; gbc.insets = new Insets(20, 10, 10, 10);
+                    btnUpdate.setBackground(EXCEL_GREEN);
+                    btnUpdate.setForeground(Color.WHITE);
+                    gbc.gridx = 0;
+                    gbc.gridy = 6;
+                    gbc.gridwidth = 2;
+                    gbc.insets = new Insets(20, 10, 10, 10);
                     upDialog.add(btnUpdate, gbc);
 
                     btnUpdate.addActionListener(commitEvt -> {
@@ -470,22 +558,28 @@ public class ProfessionalManagementSystem extends JFrame {
 
                             String upSQL = "UPDATE student_records SET name=?, mobile_no=?, address=?, course=?, bill=?, pending_balance = pending_balance + ?, dynamic_notes=? WHERE id=?";
                             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                                 PreparedStatement pstmt = conn.prepareStatement(upSQL)) {
+                                    PreparedStatement pstmt = conn.prepareStatement(upSQL)) {
                                 pstmt.setString(1, editName.getText().trim());
                                 pstmt.setString(2, editMobile.getText().trim());
                                 pstmt.setString(3, editAddress.getText().trim());
                                 pstmt.setString(4, editCourse.getText().trim());
                                 pstmt.setDouble(5, newBill);
-                                pstmt.setDouble(6, billDiff); // Add/Subtract variance directly into ongoing metrics balance
+                                pstmt.setDouble(6, billDiff); // Add/Subtract variance directly into ongoing metrics
+                                                              // balance
                                 pstmt.setString(7, editNotes.getText().trim());
                                 pstmt.setInt(8, targetId);
 
                                 pstmt.executeUpdate();
-                                JOptionPane.showMessageDialog(upDialog, "Institutional entry logs modified successfully.", "System Updated", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(upDialog,
+                                        "Institutional entry logs modified successfully.", "System Updated",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 upDialog.dispose();
                                 loadFilteredRecords.run();
                             }
-                        } catch (Exception ex) { JOptionPane.showMessageDialog(upDialog, "Error saving updates: " + ex.getMessage(), "Fault", JOptionPane.ERROR_MESSAGE); }
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(upDialog, "Error saving updates: " + ex.getMessage(), "Fault",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
                     });
                     upDialog.setVisible(true);
                 }
@@ -500,6 +594,7 @@ public class ProfessionalManagementSystem extends JFrame {
         dialog.add(tableScrollPane, BorderLayout.CENTER);
         dialog.setVisible(true);
     }
+
     // --- MODULE 4: ENTERPRISE ADMIN DIAGNOSTIC SUITE & SYSTEM HEALTH ---
     private void openAdminDialog() {
         JDialog dialog = new JDialog(this, "System Administration & Infrastructure Health", true);
@@ -567,7 +662,7 @@ public class ProfessionalManagementSystem extends JFrame {
 
                 String countScholarsSQL = "SELECT COUNT(*), COUNT(DISTINCT course) FROM student_records";
                 try (Statement stmt = conn.createStatement();
-                     ResultSet rs = stmt.executeQuery(countScholarsSQL)) {
+                        ResultSet rs = stmt.executeQuery(countScholarsSQL)) {
                     if (rs.next()) {
                         lblScholarsValue.setText(rs.getInt(1) + "  ");
                         lblCoursesValue.setText(rs.getInt(2) + "  ");
@@ -588,14 +683,15 @@ public class ProfessionalManagementSystem extends JFrame {
         dialog.add(mainPanel, BorderLayout.CENTER);
         dialog.setVisible(true);
     }
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         SwingUtilities.invokeLater(() -> {
             new ProfessionalManagementSystem().setVisible(true);
         });
     }
-} 
-
+}
